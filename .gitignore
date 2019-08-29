@@ -1,0 +1,11 @@
+.idea/
+
+build/
+node_modules/
+
+*.ai
+*.psd
+*.pdf
+*.log
+
+Thumbs.db
