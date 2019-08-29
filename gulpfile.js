@@ -2,7 +2,7 @@
 
 const { series, parallel, src, dest, watch, lastRun } = require( 'gulp' );
 const pug = require( 'gulp-pug' );
-const sass = require( 'gulp-sass' );
+const scss = require( 'gulp-sass' );
 const autoprefixer = require( 'gulp-autoprefixer' );
 const csso = require( 'gulp-csso' );
 const imagemin = require( 'gulp-imagemin' );
@@ -67,16 +67,16 @@ function compilePug() {
 exports.compilePug = compilePug;
 
 
-// Компиляция SASS
-function compileSass() {
-  return src( `${root.src}pages/**/*.sass` )
+// Компиляция SCSS
+function compileScss() {
+  return src( `${root.src}pages/**/*.scss` )
     .pipe( plumber( {
       errorHandler: notify.onError( {
-        title: "Ошибка в SASS",
+        title: "Ошибка в SCSS",
         message: "Error: <%= error.message %>"
       } )
     } ) )
-    .pipe( sass() )
+    .pipe( scss() )
     .pipe( debug({title: 'Compiles:'} ) )
     .pipe( autoprefixer({cascade: false} ) )
     .pipe( csso({comments: false, restructure: false} ) )
@@ -84,7 +84,7 @@ function compileSass() {
     .pipe( dest( path.build.css ) )
     .pipe( browserSync.stream() );
 }
-exports.compileSass = compileSass;
+exports.compileScss = compileScss;
 
 
 // Сборка JS
@@ -224,30 +224,30 @@ function serve() {
 
   // Стили библиотеки: все события
   watch(
-      [ `${root.src}libraries/**/**/*.sass` ],
+      [ `${root.src}libraries/**/**/*.scss` ],
       { events: ['all'], delay: 100 },
-      series( compileSass, reload )
+      series( compileScss, reload )
   );
 
   // Глобальные стили: все события
   watch(
-      [ `${root.src}layouts/**/*.sass` ],
+      [ `${root.src}layouts/**/*.scss` ],
       { events: ['all'], delay: 100 },
-      series( compileSass, reload )
+      series( compileScss, reload )
   );
 
   // Стили блоков: все события
   watch(
-    [ `${root.src}blocks/**/*.sass` ],
+    [ `${root.src}blocks/**/*.scss` ],
     { events: ['all'], delay: 100 },
-    series( compileSass, reload )
+    series( compileScss, reload )
   );
 
   // Стили страниц: все события
   watch(
-      [ `${root.src}pages/**/*.sass` ],
+      [ `${root.src}pages/**/*.scss` ],
       { events: ['all'], delay: 100 },
-      series( compileSass, reload )
+      series( compileScss, reload )
   );
 
   // Скриптовые глобальные файлы: все события
@@ -284,13 +284,13 @@ exports.build = series(
     parallel(clearBuildDir),
     parallel(optimizeImages, optimizeSvg, convertImagesToWebp, generateSvgSprite),
     parallel(convertTTFtoWOFF, convertTTFtoWOFF2),
-    parallel(compilePug, compileSass, buildJs),
+    parallel(compilePug, compileScss, buildJs),
 );
 
 exports.default = series(
     parallel(clearBuildDir),
     parallel(optimizeImages, optimizeSvg, convertImagesToWebp, generateSvgSprite),
     parallel(convertTTFtoWOFF, convertTTFtoWOFF2),
-    parallel(compilePug, compileSass, buildJs),
+    parallel(compilePug, compileScss, buildJs),
     serve,
 );
