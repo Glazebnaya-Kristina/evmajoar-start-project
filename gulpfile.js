@@ -215,6 +215,13 @@ function serve() {
       series( compilePug, reload )
   );
 
+  // Разметка секций: все события
+  watch(
+      [ `${root.src}sections/**/*.pug` ],
+      { events: ['all'], delay: 100 },
+      series( compilePug, reload )
+  );
+
   // Страницы: все события
   watch(
       [ `${root.src}pages/**/*.pug`],
@@ -241,6 +248,13 @@ function serve() {
     [ `${root.src}blocks/**/*.scss` ],
     { events: ['all'], delay: 100 },
     series( compileScss, reload )
+  );
+
+  // Стили секций: все события
+  watch(
+      [ `${root.src}sections/**/*.scss` ],
+      { events: ['all'], delay: 100 },
+      series( compileScss, reload )
   );
 
   // Стили страниц: все события
