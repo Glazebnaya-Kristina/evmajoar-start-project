@@ -126,7 +126,7 @@ exports.convertTTFtoWOFF2 = convertTTFtoWOFF2;
 
 // Оптимизация PNG, JPG
 function optimizeImages() {
-  return src( `${root.src}blocks/**/images/*.{jpg,png}` )
+  return src( `${root.src}theme/images/*.{jpg,png}` )
     .pipe( imagemin([
       imagemin.optipng(),
       imageminMozjpeg({quality: 75} )
@@ -140,7 +140,7 @@ exports.optimizeImages = optimizeImages;
 
 // Оптимизация SVG
 function optimizeSvg() {
-  return src( `${root.src}blocks/**/images/*.svg` )
+  return src( `${root.src}theme/images/*.svg` )
     .pipe( imagemin([
       imagemin.svgo( {
         plugins: [
@@ -159,7 +159,7 @@ exports.optimizeSvg = optimizeSvg;
 
 // Конвертация изображений в WebP
 function convertImagesToWebp() {
-  return src( `${root.src}blocks/**/images/*.{jpg,png,svg}` )
+  return src( `${root.src}theme/images/*.{jpg,png,svg}` )
     .pipe( imagemin([webp({quality: 75} )] ) )
     .pipe( rename({extname: '.webp'} ) )
     .pipe( rename({dirname: ''} ) )
@@ -171,7 +171,7 @@ exports.convertImagesToWebp = convertImagesToWebp;
 
 // Генерация SVG-спрайта
 function generateSvgSprite() {
-  return src( `${root.src}blocks/sprite-svg/*.svg` )
+  return src( `${root.src}theme/sprites/svg/*.svg` )
     .pipe(svgmin(function () {
       return { plugins: [{ cleanupIDs: { minify: true } }] }
     }))
@@ -201,12 +201,14 @@ function serve() {
     open: false
   } );
 
+
   // Шаблоны: все события
   watch(
       [ `${root.src}layouts/*.pug`],
       { events: ['all'], delay: 100 },
       series( compilePug, reload )
   );
+
 
   // Разметка блоков: все события
   watch(
@@ -215,12 +217,14 @@ function serve() {
       series( compilePug, reload )
   );
 
+
   // Разметка секций: все события
   watch(
       [ `${root.src}sections/**/*.pug` ],
       { events: ['all'], delay: 100 },
       series( compilePug, reload )
   );
+
 
   // Страницы: все события
   watch(
@@ -229,12 +233,14 @@ function serve() {
       series( compilePug, reload )
   );
 
+
   // Стили библиотеки: все события
   watch(
       [ `${root.src}libraries/**/**/*.scss` ],
       { events: ['all'], delay: 100 },
       series( compileScss, reload )
   );
+
 
   // Глобальные стили: все события
   watch(
@@ -243,12 +249,14 @@ function serve() {
       series( compileScss, reload )
   );
 
+
   // Стили блоков: все события
   watch(
     [ `${root.src}blocks/**/*.scss` ],
     { events: ['all'], delay: 100 },
     series( compileScss, reload )
   );
+
 
   // Стили секций: все события
   watch(
@@ -257,12 +265,14 @@ function serve() {
       series( compileScss, reload )
   );
 
+
   // Стили страниц: все события
   watch(
       [ `${root.src}pages/**/*.scss` ],
       { events: ['all'], delay: 100 },
       series( compileScss, reload )
   );
+
 
   // Скриптовые глобальные файлы: все события
   watch(
@@ -271,23 +281,26 @@ function serve() {
     series( buildJs, reload )
   );
 
+
   // Шрифты
   watch(
-    [ `${root.src}blocks/page/fonts/**/*.ttf` ],
+    [ `${root.src}theme/fonts/**/*.ttf` ],
     { events: ['all'], delay: 100 },
     series( convertTTFtoWOFF, convertTTFtoWOFF2 )
   );
 
+
   // Изображения
   watch(
-    [ `${root.src}blocks/**/images/*.{jpg,jpeg,png,gif,svg}` ],
+    [ `${root.src}theme/images/*.{jpg,jpeg,png,gif,svg}` ],
     { events: ['all'], delay: 100 },
     series( optimizeImages, optimizeSvg, convertImagesToWebp, reload )
   );
 
+
   // Спрайт SVG
   watch(
-    [ `${root.src}blocks/sprite-svg/*.svg` ],
+    [ `${root.src}theme/sprites/svg/*.svg` ],
     { events: ['all'], delay: 100 },
     series( generateSvgSprite, reload )
   );
