@@ -38,6 +38,7 @@ const path = {
     font: root.build + 'fonts/',
     img: root.build + 'images/',
     ico: root.build + 'icons/',
+    videos: root.build + 'videos/',
   }
 };
 
@@ -183,6 +184,15 @@ function generateSvgSprite() {
 exports.generateSvgSprite = generateSvgSprite;
 
 
+// Копирование видео
+function copyVideos() {
+  return src( `${root.src}theme/videos/**/*.mp4` )
+      .pipe( dest( path.build.ico ) )
+      .pipe( browserSync.stream() );
+}
+exports.copyVideos = copyVideos;
+
+
 // Перезагрузка браузера
 function reload(done) {
   browserSync.reload();
@@ -202,79 +212,34 @@ function serve() {
   } );
 
 
-  // Шаблоны: все события
+  // Разметка
   watch(
-      [ `${root.src}layouts/*.pug`],
-      { events: ['all'], delay: 100 },
-      series( compilePug, reload )
+    [
+      `${root.src}blocks/**/*.pug`,
+      `${root.src}sections/**/*.pug`,
+      `${root.src}layouts/*.pug`,
+      `${root.src}pages/**/*.pug`
+    ],
+    { events: ['all'], delay: 100 },
+    series( compilePug, reload )
   );
 
 
-  // Разметка блоков: все события
+  // Стили
   watch(
-      [ `${root.src}blocks/**/*.pug` ],
-      { events: ['all'], delay: 100 },
-      series( compilePug, reload )
-  );
-
-
-  // Разметка секций: все события
-  watch(
-      [ `${root.src}sections/**/*.pug` ],
-      { events: ['all'], delay: 100 },
-      series( compilePug, reload )
-  );
-
-
-  // Страницы: все события
-  watch(
-      [ `${root.src}pages/**/*.pug`],
-      { events: ['all'], delay: 100 },
-      series( compilePug, reload )
-  );
-
-
-  // Стили библиотеки: все события
-  watch(
-      [ `${root.src}libraries/**/**/*.scss` ],
-      { events: ['all'], delay: 100 },
-      series( compileScss, reload )
-  );
-
-
-  // Глобальные стили: все события
-  watch(
-      [ `${root.src}layouts/**/*.scss` ],
-      { events: ['all'], delay: 100 },
-      series( compileScss, reload )
-  );
-
-
-  // Стили блоков: все события
-  watch(
-    [ `${root.src}blocks/**/*.scss` ],
+    [
+      `${root.src}libraries/**/**/*.scss`,
+      `${root.src}blocks/**/*.scss`,
+      `${root.src}sections/**/*.scss`,
+      `${root.src}layouts/**/*.scss`,
+      `${root.src}pages/**/*.scss`
+    ],
     { events: ['all'], delay: 100 },
     series( compileScss, reload )
   );
 
 
-  // Стили секций: все события
-  watch(
-      [ `${root.src}sections/**/*.scss` ],
-      { events: ['all'], delay: 100 },
-      series( compileScss, reload )
-  );
-
-
-  // Стили страниц: все события
-  watch(
-      [ `${root.src}pages/**/*.scss` ],
-      { events: ['all'], delay: 100 },
-      series( compileScss, reload )
-  );
-
-
-  // Скриптовые глобальные файлы: все события
+  // Скрипты
   watch(
     [ `${root.src}blocks/**/*.js` ],
     { events: ['all'], delay: 100 },
@@ -298,25 +263,33 @@ function serve() {
   );
 
 
-  // Спрайт SVG
+  // SVG-спрайт
   watch(
     [ `${root.src}theme/sprites/svg/*.svg` ],
     { events: ['all'], delay: 100 },
     series( generateSvgSprite, reload )
+  );
+
+
+  // Видео
+  watch(
+      [ `${root.src}theme/videos/**/*.mp4` ],
+      { events: ['all'], delay: 100 },
+      series( copyVideos, reload )
   );
 }
 
 
 exports.build = series(
     parallel(clearBuildDir),
-    parallel(optimizeImages, optimizeSvg, convertImagesToWebp, generateSvgSprite),
+    parallel(optimizeImages, optimizeSvg, convertImagesToWebp, generateSvgSprite, copyVideos),
     parallel(convertTTFtoWOFF, convertTTFtoWOFF2),
     parallel(compilePug, compileScss, buildJs),
 );
 
 exports.default = series(
     parallel(clearBuildDir),
-    parallel(optimizeImages, optimizeSvg, convertImagesToWebp, generateSvgSprite),
+    parallel(optimizeImages, optimizeSvg, convertImagesToWebp, generateSvgSprite, copyVideos),
     parallel(convertTTFtoWOFF, convertTTFtoWOFF2),
     parallel(compilePug, compileScss, buildJs),
     serve,

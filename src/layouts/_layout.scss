@@ -1,8 +1,8 @@
 // Стили библиотеки
-@import "../libraries/variables";
-@import "../libraries/mixins";
-@import "../libraries/print";
+@import "../libraries/variables.scss";
+@import "../libraries/mixins.scss";
+@import "../libraries/print.scss";
 
 // Глобальные стили
-@import "../libraries/settings";
-@import "../libraries/animations";
+@import "../libraries/settings.scss";
+@import "../libraries/animations.scss";
