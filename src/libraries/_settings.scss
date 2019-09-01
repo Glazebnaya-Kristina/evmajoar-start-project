@@ -98,13 +98,16 @@ label,
 select,
 textarea {
   touch-action: manipulation; // Стилевая коррекция 300ms задержки (для поддерживающих браузеров)
-  margin: 0;                  // Убираем margin в Firefox и Safari
+  margin: 0;  // Убираем margin в Firefox и Safari
+  font: inherit;
+  color: inherit;
 }
 
 button,
 input {
   overflow: visible;    // Покажем торчащее в Edge
   text-transform: none; // Уберём наследование text transform в Firefox
+  color: inherit;
 }
 
 button,
@@ -112,6 +115,7 @@ html [type="button"],
 [type="reset"],
 [type="submit"] {
   -webkit-appearance: button; // Коррекция проблем стилизации для Safari
+  font: inherit;
 }
 
 button::-moz-focus-inner,
@@ -229,6 +233,7 @@ p {
   hyphenate-limit-lines: 2;
   hyphenate-limit-last: always;
   hyphenate-limit-zone: 8%;
+  margin: 0;
 }
 
 address {
