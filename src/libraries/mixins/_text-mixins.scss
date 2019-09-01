@@ -7,3 +7,15 @@
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
+
+@mixin ul-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin pseudo ($content: '', $position: absolute, $display: block) {
+  content: $content;
+  position: $position;
+  display: $display;
+}

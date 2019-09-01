@@ -109,7 +109,7 @@ exports.buildJs = buildJs;
 
 // Конвертация шрифтов
 function convertTTFtoWOFF() {
-  return src( `${root.src}blocks/page/fonts/**/*.ttf` )
+  return src( `${root.src}theme/fonts/**/*.ttf` )
     .pipe( ttf2woff() )
     .pipe( dest(path.build.font) )
     .pipe( browserSync.stream() );
@@ -117,7 +117,7 @@ function convertTTFtoWOFF() {
 exports.convertTTFtoWOFF = convertTTFtoWOFF;
 
 function convertTTFtoWOFF2() {
-  return src( `${root.src}blocks/page/fonts/**/*.ttf` )
+  return src( `${root.src}theme/fonts/**/*.ttf` )
     .pipe( ttf2woff2() )
     .pipe( dest( path.build.font ) )
     .pipe( browserSync.stream() );
