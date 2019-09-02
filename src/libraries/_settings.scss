@@ -12,18 +12,14 @@
   }
 }
 
-
-/* stylelint-disable */
-// @font-face {
-//   font-family: 'FONTNAME';
-//   src: url('../fonts/FONTNAME.woff2') format('woff2'),
-//        url('../fonts/FONTNAME.woff') format('woff');
-//   font-weight: 400;
-//   font-style: normal;
-//   font-display: swap;
-// }
-/* stylelint-enable */
-
+@font-face {
+  font-family: 'Lato';
+  src: url('#{$fontDir}lato/lato-regular.woff2') format('woff2'),
+  url('#{$fontDir}Lato/lato-regular.woff') format('woff');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
 
 .page {
   box-sizing: border-box;
